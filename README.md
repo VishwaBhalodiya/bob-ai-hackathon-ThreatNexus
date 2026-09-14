@@ -9,35 +9,43 @@
 | Field | Value |
 |---|---|
 | **Team Name** | [ThreatNexus] |
-| **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
+| **Track** | [AI] |
+| **Team Lead** | [Diya Macwan] — [macwandiya8@gmail.com] |
 | **Members** | [Vishwa Bhalodiya], [Dhruvi Bhanderi], [Diya Macwan], [Tanish Mahyavanshi] |
 
 ---
 
 ## 🎯 Problem Statement
 
-> In 2–3 sentences: What problem does your project solve? Who experiences this problem?
+Security analysts receive thousands of alerts from SIEM systems, security sensors, threat-intelligence feeds and other sources. Because these alerts contain different levels of severity, context and reliability, analysts can struggle to identify which threats require immediate attention, leading to alert fatigue and the risk of missing critical attacks.
 
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
+ThreatNexus addresses this problem by helping security analysts understand, correlate and prioritise alerts based on threat intelligence, asset criticality, behavioural indicators and related security events.
 
 ---
 
 ## 💡 Solution
 
-> In 2–3 sentences: What did you build? How does it solve the problem above?
+ThreatNexus is an AI-assisted threat intelligence and alert prioritisation platform that converts large numbers of security alerts into a ranked list of actionable threats.
 
-[Describe your solution clearly. Explain the core mechanism — what makes it work.]
+The platform extracts and enriches Indicators of Compromise (IOCs), combines threat reputation with asset context and behavioural information, correlates related events, and calculates an explainable risk score from 0–100. An AI-assisted layer then provides a concise explanation of why an alert is important and suggests investigation actions for the analyst.
 
 ---
 
 ## ✨ Key Features
 
-- **Feature 1:** [Brief description — e.g., "Real-time anomaly detection using watsonx.ai"]
-- **Feature 2:** [Brief description]
-- **Feature 3:** [Brief description]
-- **Feature 4:** [Optional]
-- **Feature 5:** [Optional]
+- *Context-Aware Alert Prioritisation:* Ranks security alerts using threat severity, IOC reputation, asset criticality, behavioural suspicion and event correlation.
+
+- *IOC Extraction & Threat Intelligence:* Identifies indicators such as IP addresses, domains, URLs and hashes and associates them with available threat-intelligence information.
+
+- *Explainable Risk Scoring:* Generates a transparent risk score from 0–100 and classifies threats as Low, Medium, High or Critical.
+
+- *Alert Correlation & Attack Stories:* Connects related security events to identify possible multi-stage attack activity instead of treating every alert independently.
+
+- *AI-Assisted Threat Explanation:* Converts technical security information into an understandable summary explaining why an alert is dangerous and what the analyst should investigate next.
+
+- *Asset Context Analysis:* Considers the importance of the affected asset so that an identical threat can receive different priorities depending on the target.
+
+- *Analyst-Centric Dashboard:* Provides a centralized view of critical alerts, risk distribution, threat intelligence, attack timelines and recommended actions.
 
 ---
 
@@ -45,11 +53,15 @@
 
 | Category | Technologies |
 |---|---|
-| **Languages** | [e.g., Python, TypeScript] |
-| **Frameworks** | [e.g., FastAPI, React] |
-| **IBM Technologies** | [e.g., watsonx.ai, IBM Bob, IBM Cloud] |
-| **Databases** | [e.g., PostgreSQL, Redis] |
-| **Other** | [e.g., Docker, GitHub Actions] |
+| *Languages* | Python, JavaScript / TypeScript, HTML, CSS |
+| *Frameworks* | FastAPI, React.js, Vite |
+| *AI Technologies* | IBM Bob AI, LLM-based threat explanation |
+| *Databases* | SQLite |
+| *Data Processing* | Python, Pydantic, SQLAlchemy |
+| *Visualization* | Recharts |
+| *API* | REST APIs |
+| *Development Tools* | Git, GitHub, VS Code, Postman |
+| *Other* | JSON-based security alert and threat-intelligence data |
 
 ---
 
