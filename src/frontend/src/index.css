@@ -1,0 +1,82 @@
+/* ── Global reset & design tokens ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── Base palette — cold blue-black hue ramp ────────────────────────────── */
+  --bg-base:       #060b14;   /* void: deepest background                    */
+  --bg-surface:    #0c1524;   /* panel fill: cards, header, sticky bars       */
+  --bg-raised:     #132035;   /* elevated state: hover rows, active inputs    */
+  --border:        #1e3352;   /* all structural lines — cooler than grey      */
+  --border-bright: #2a4568;   /* emphasis borders, focus rings                */
+
+  /* ── Text ───────────────────────────────────────────────────────────────── */
+  --text-primary:  #ccd8e8;   /* body + data — blue-tinted, not pure white   */
+  --text-muted:    #4a6380;   /* labels, secondary metadata                  */
+  --text-dim:      #2e4a6a;   /* dividers, disabled                          */
+
+  /* ── Accent — used exactly once: LIVE indicator + focus rings ──────────── */
+  --accent-live:   #0ea5e9;
+
+  /* ── Priority semantic colors — unchanged meaning ──────────────────────── */
+  --critical: #ef4444;
+  --high:     #f97316;
+  --medium:   #eab308;
+  --low:      #22c55e;
+  --info:     #3b82f6;
+
+  --critical-bg: rgba(239,68,68,0.10);
+  --high-bg:     rgba(249,115,22,0.10);
+  --medium-bg:   rgba(234,179,8,0.10);
+  --low-bg:      rgba(34,197,94,0.10);
+  --info-bg:     rgba(59,130,246,0.10);
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  /* Interface chrome: headings, labels, badges, buttons */
+  --font:      'Inter', system-ui, -apple-system, sans-serif;
+  /* Raw evidence: IPs, scores, timestamps, IDs, hashes */
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Mono', monospace;
+
+  /* ── Geometry ────────────────────────────────────────────────────────────── */
+  --radius-sm: 3px;
+  --radius:    6px;
+  --radius-lg: 10px;
+
+  /* ── Backward-compat aliases ─────────────────────────────────────────────── */
+  --bg-card:  #0c1524;   /* = --bg-surface */
+  --bg-hover: #132035;   /* = --bg-raised  */
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Focus ring — accent-live only, visible, accessible ─────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent-live);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-bright); }
+
+/* ── Utilities ───────────────────────────────────────────────────────────── */
+/* Evidence register — applied to any data value an analyst reads */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+}
+

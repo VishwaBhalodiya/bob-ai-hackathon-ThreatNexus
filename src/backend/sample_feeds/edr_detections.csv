@@ -1,0 +1,5 @@
+detected_at,hostname,source_ip,destination_ip,detection,severity,description
+2026-09-15 09:16:40,SQLSRV01.corp,91.92.109.173,10.0.0.20,Ransomware behaviour: mass file encryption,critical,"svchost.exe wrote DECRYPT_ME.txt and encrypted 1.2k files in C:\Shares\Finance"
+2026-09-15 09:17:12,DC01.corp.local,45.155.204.18,10.0.0.10,Privilege escalation via token impersonation,high,"Process spawned as SYSTEM from a user session using SeImpersonatePrivilege"
+2026-09-15 09:18:30,DEV-MACBOOK-07,91.92.109.173,192.168.2.14,Malware execution blocked,high,"Dropper hash 5f2b3c9a1d8e4f7c quarantined by on-access scan"
+2026-09-15 09:25:05,HR-LAPTOP-12,104.21.55.200,192.168.1.45,Suspicious login,low,"Local logon outside business hours; no further activity"

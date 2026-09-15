@@ -1,0 +1,4 @@
+NOT DEPLOYED — run locally using docs/setup-guide.md
+
+Backend:  http://localhost:8000  (OpenAPI docs at /docs)
+Frontend: http://localhost:5173

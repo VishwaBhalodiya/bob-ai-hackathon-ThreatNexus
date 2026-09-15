@@ -1,0 +1,4 @@
+https://youtu.be/your-demo-video-link-here
+
+TODO (team): replace the URL above with the real 3-5 minute demo video (YouTube unlisted / Loom / Box / Drive).
+Suggested flow: start backend + frontend -> dashboard -> "Ingest all sample feeds" -> open a chain alert (verdict, IOC chips, BLUF, timeline) -> mark False Positive -> Commander Brief -> Print.

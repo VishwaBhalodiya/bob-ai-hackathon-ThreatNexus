@@ -1,0 +1,272 @@
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+.timeline-root {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.timeline-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timeline-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeline-icon {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.timeline-title {
+  /* inherits .detail-card-title styles from parent Section */
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.timeline-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ── Attack chain banner ──────────────────────────────────────────────────── */
+.attack-chain-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  animation: banner-pulse 3s ease-in-out infinite;
+}
+
+@keyframes banner-pulse {
+  0%, 100% { border-color: rgba(239,68,68,0.35); }
+  50%       { border-color: rgba(239,68,68,0.70); }
+}
+
+.chain-icon {
+  font-size: 18px;
+  color: #ef4444;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.chain-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ef4444;
+  text-transform: uppercase;
+}
+
+.chain-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 3px;
+}
+
+/* ── Tactic legend ────────────────────────────────────────────────────────── */
+.tactic-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-arrow {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* ── Tactic pill (shared by legend + timeline cards) ─────────────────────── */
+.tactic-pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 12px;
+  border: 1px solid;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Timeline track ──────────────────────────────────────────────────────── */
+.timeline-track {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Single timeline item ────────────────────────────────────────────────── */
+.tl-item {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+/* ── Connector column ────────────────────────────────────────────────────── */
+.tl-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  flex-shrink: 0;
+  padding-top: 14px;
+}
+
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: transform 0.15s;
+}
+
+.tl-item:hover .tl-dot {
+  transform: scale(1.3);
+}
+
+.tl-dot--current {
+  width: 14px;
+  height: 14px;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.tl-line {
+  width: 2px;
+  flex: 1;
+  min-height: 12px;
+  background: var(--border-bright);
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────────── */
+.tl-card {
+  flex: 1;
+  margin: 8px 0 8px 12px;
+  padding: 12px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.tl-card:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-bright);
+}
+
+.tl-card--current {
+  background: var(--bg-card);
+  border-width: 2px;
+  cursor: default;
+}
+
+.tl-card--current:hover {
+  background: var(--bg-card);
+}
+
+/* ── Card internals ─────────────────────────────────────────────────────── */
+.tl-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.tl-event-type {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tl-current-marker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.tl-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tl-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.tl-meta-item {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tl-arrow {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tl-severity {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tl-score {
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.tl-tactic {
+  margin-top: 4px;
+}
+
+.tl-link-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--info);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.tl-card:hover .tl-link-hint {
+  opacity: 1;
+}

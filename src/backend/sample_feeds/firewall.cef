@@ -1,0 +1,4 @@
+Sep 15 09:12:41 fw-edge01 CEF:0|Palo Alto Networks|PAN-OS|10.2|THREAT|Outbound C2 beacon to known malicious host|9|rt=2026-09-15T09:12:41Z src=185.220.101.47 dst=10.0.0.10 spt=4444 dpt=443 dhost=DC01.corp.local cat=command-and-control msg=Encrypted beacon to malware-c2.ru every 60s
+Sep 15 09:14:02 fw-edge01 CEF:0|Palo Alto Networks|PAN-OS|10.2|THREAT|Large outbound data transfer|8|rt=2026-09-15T09:14:02Z src=185.220.101.47 dst=10.0.0.40 spt=51820 dpt=443 dhost=BACKUP-SRV02.corp cat=exfiltration msg=2.4 GB uploaded to external host in 6 minutes
+Sep 15 09:20:15 fw-edge01 CEF:0|Palo Alto Networks|PAN-OS|10.2|THREAT|TCP port scan detected|3|rt=2026-09-15T09:20:15Z src=104.21.55.200 dst=10.0.1.10 dpt=22 dhost=WEB01.corp cat=scan msg=SYN scan across 1024 ports
+Sep 15 09:31:07 fw-edge01 CEF:0|Cisco|ASA|9.16|106023|Deny inbound connection|2|rt=2026-09-15T09:31:07Z src=8.8.8.8 dst=10.0.1.10 spt=53 dpt=53 dhost=WEB01.corp msg=DNS reply blocked by ACL

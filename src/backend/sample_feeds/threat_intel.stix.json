@@ -1,0 +1,78 @@
+{
+  "type": "bundle",
+  "id": "bundle--3f2c1a9e-6d33-4b7f-9d1a-0a1b2c3d4e5f",
+  "objects": [
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--7c1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5b",
+      "created": "2026-09-01T00:00:00.000Z",
+      "modified": "2026-09-14T00:00:00.000Z",
+      "name": "Command & Control",
+      "is_family": true
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "created": "2026-09-14T08:00:00.000Z",
+      "modified": "2026-09-15T06:00:00.000Z",
+      "name": "Cobalt Strike team server",
+      "description": "Observed serving beacon payloads to defence-sector targets",
+      "indicator_types": ["malicious-activity"],
+      "pattern": "[ipv4-addr:value = '77.91.124.20']",
+      "pattern_type": "stix",
+      "valid_from": "2026-09-14T08:00:00Z",
+      "confidence": 92
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
+      "created": "2026-09-14T08:00:00.000Z",
+      "modified": "2026-09-15T06:00:00.000Z",
+      "name": "Ransomware payment portal",
+      "indicator_types": ["malicious-activity"],
+      "pattern": "[domain-name:value = 'lockpay-portal.onion']",
+      "pattern_type": "stix",
+      "valid_from": "2026-09-14T08:00:00Z",
+      "confidence": 88
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "created": "2026-09-13T12:00:00.000Z",
+      "modified": "2026-09-15T06:00:00.000Z",
+      "name": "Scanner node - low confidence",
+      "indicator_types": ["anomalous-activity"],
+      "pattern": "[ipv4-addr:value = '104.21.55.200']",
+      "pattern_type": "stix",
+      "valid_from": "2026-09-13T12:00:00Z",
+      "confidence": 60
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80",
+      "created": "2026-09-15T05:00:00.000Z",
+      "modified": "2026-09-15T05:00:00.000Z",
+      "name": "Dropper SHA-256",
+      "indicator_types": ["malicious-activity"],
+      "pattern": "[file:hashes.'SHA-256' = '5f2b3c9a1d8e4f7cabcd1234abcd1234abcd1234abcd12345f2b3c9a1d8e4f7c']",
+      "pattern_type": "stix",
+      "valid_from": "2026-09-15T05:00:00Z",
+      "confidence": 95
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091",
+      "created": "2026-09-14T08:00:00.000Z",
+      "modified": "2026-09-14T08:00:00.000Z",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "target_ref": "malware--7c1a2b3c-4d5e-4f60-8a9b-0c1d2e3f4a5b"
+    }
+  ]
+}

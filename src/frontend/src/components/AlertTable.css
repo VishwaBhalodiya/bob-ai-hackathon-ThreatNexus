@@ -1,0 +1,153 @@
+.alert-table-wrap {
+  overflow-x: auto;
+  /* No outer border — the table rows themselves are the structure */
+}
+
+.alert-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.alert-table thead tr {
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-bright);
+}
+
+.alert-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.alert-table th.sortable { cursor: pointer; }
+.alert-table th.sortable:hover { color: var(--text-primary); }
+
+.alert-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.alert-table tbody tr:last-child { border-bottom: none; }
+
+.alert-row { cursor: pointer; }
+.alert-row:hover { background: var(--bg-raised); }
+
+.alert-table td {
+  padding: 10px 14px;
+  vertical-align: middle;
+}
+
+.muted   { color: var(--text-muted) !important; }
+.nowrap  { white-space: nowrap; }
+/* IPs and raw data — evidence register */
+.ip      { font-family: var(--font-mono); font-size: 12px; }
+.event-type { font-family: var(--font); font-weight: 500; font-size: 13px; }
+
+/* ── Risk score cell ─────────────────────────────────────────────────────── */
+/* Primary: large mono numeral. Bar is a background fill, not the focus. */
+.risk-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 80px;
+  position: relative;
+}
+
+.risk-bar-track {
+  position: absolute;
+  inset: -6px 0;          /* span the full cell height */
+  background: var(--bg-base);
+  border-radius: 1px;
+  overflow: hidden;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  opacity: 0.18;           /* subtle wash behind the numeral */
+  transition: width 0.4s ease;
+}
+
+.risk-bar-val {
+  font-family: var(--font-mono);
+  font-size: 15px;         /* larger — this is the primary read */
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
+  min-width: 28px;
+}
+
+/* ── Status badge ────────────────────────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.status-open     { background: rgba(239,68,68,0.10);  color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+.status-progress { background: rgba(234,179,8,0.10);  color: #fbbf24; border: 1px solid rgba(234,179,8,0.2); }
+.status-resolved { background: rgba(34,197,94,0.10);  color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+
+/* ── Severity adjustment indicator ──────────────────────────────────────── */
+.sev-adjusted {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.sev-adj-arrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+.sev-adjusted:hover .sev-adj-arrow { opacity: 1; }
+
+/* ── Feed source tag ─────────────────────────────────────────────────────── */
+.source-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+/* ── Triage / feedback icon ──────────────────────────────────────────────── */
+.feedback-icon {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: var(--text-muted);
+  font-size: 13px;
+}

@@ -1,0 +1,332 @@
+.dashboard {
+  min-height: 100vh;
+  background: var(--bg-base);
+  padding-bottom: 56px;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 56px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dash-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon { font-size: 22px; line-height: 1; }
+
+.logo-title {
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  /* Tight monochrome wordmark — the single color pop is the live dot */
+  color: var(--text-primary);
+}
+
+.logo-sub {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.dash-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* LIVE dot — the one accent-live use on the dashboard */
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-live);
+  box-shadow: 0 0 0 0 var(--accent-live);
+  animation: live-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes live-breathe {
+  0%   { box-shadow: 0 0 0 0   rgba(14,165,233,0.6); }
+  60%  { box-shadow: 0 0 0 5px rgba(14,165,233,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(14,165,233,0);   }
+}
+
+.live-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-live);
+  letter-spacing: 1.5px;
+}
+
+.dash-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Content sections ────────────────────────────────────────────────────── */
+.dash-section {
+  max-width: 1440px;
+  margin: 20px auto 0;
+  padding: 0 32px;
+}
+
+/* ── Card — no rounded-everything uniformity, sharp left accent instead ──── */
+.dash-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+}
+
+/* Panel title — plain sentence-case, no ALL-CAPS eyebrow */
+.card-title {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.card-title-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* ── Status filter pills ─────────────────────────────────────────────────── */
+.status-filter-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.status-filter-pill {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 3px 12px;
+  border-radius: 2px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  letter-spacing: 0.2px;
+}
+
+.status-filter-pill:hover {
+  border-color: var(--border-bright);
+  color: var(--text-primary);
+}
+
+.status-filter-pill.active {
+  background: rgba(14,165,233,0.10);
+  border-color: var(--accent-live);
+  color: var(--accent-live);
+}
+
+/* ── Charts row ──────────────────────────────────────────────────────────── */
+.dash-charts {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .dash-charts { grid-template-columns: 1fr; }
+  .dash-section { padding: 0 16px; }
+  .dash-header  { padding: 0 16px; }
+}
+
+/* Recharts tooltip */
+.chart-tooltip {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  font-family: var(--font);
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ── IOC heat-strip panel ────────────────────────────────────────────────── */
+.ioc-strip-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.ioc-strip-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ioc-strip-legend-labels {
+  display: flex;
+  gap: 14px;
+}
+
+.ioc-strip-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ioc-strip-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.ioc-strip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-content: flex-start;
+}
+
+.ioc-block {
+  width: 22px;
+  height: 22px;
+  border-radius: 2px;
+  cursor: default;
+  position: relative;
+  transition: transform 0.1s;
+  flex-shrink: 0;
+}
+
+.ioc-block:hover {
+  transform: scale(1.25);
+  z-index: 2;
+}
+
+/* Tooltip on hover is native `title` — no JS needed */
+.ioc-strip-empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 24px 0;
+  text-align: center;
+}
+
+/* ── Skeletons ───────────────────────────────────────────────────────────── */
+.chart-skeleton {
+  height: 200px;
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-raised) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.table-skeleton {
+  height: 300px;
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-raised) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Error banner ────────────────────────────────────────────────────────── */
+.error-banner {
+  max-width: 1440px;
+  margin: 12px auto 0;
+  padding: 10px 20px;
+  background: var(--critical-bg);
+  color: var(--critical);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-left: 3px solid var(--critical);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+
+/* ── Header actions ──────────────────────────────────────────────────────── */
+.brief-link {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--accent-live);
+  border: 1px solid rgba(14,165,233,0.35);
+  background: rgba(14,165,233,0.08);
+  padding: 4px 12px;
+  border-radius: 2px;
+  margin-right: 8px;
+  transition: background 0.12s;
+}
+.brief-link:hover { background: rgba(14,165,233,0.18); }
+
+.refresh-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-right: 6px;
+}
+.refresh-btn:hover:not(:disabled) { color: var(--text-primary); border-color: var(--border-bright); }
+.refresh-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ── Filter rows ─────────────────────────────────────────────────────────── */
+.filter-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.filter-rows .status-filter-row { margin-bottom: 0; align-items: center; }
+.filter-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 52px;
+  flex-shrink: 0;
+}
+
+.chain-flag {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--critical);
+  border: 1px solid rgba(239,68,68,0.35);
+  background: var(--critical-bg);
+  padding: 2px 8px;
+  border-radius: 2px;
+}

@@ -1,0 +1,77 @@
+team:
+  name: "ThreatNexus"
+  track: "AI"
+  lead:
+    name: "Diya Macwan"
+    email: "macwandiya8@gmail.com"
+  members:
+    - name: "Diya Macwan"
+      email: "macwandiya8@gmail.com"
+    - name: "Vishwa Bhalodiya"
+      email: ""
+    - name: "Dhruvi Bhanderi"
+      email: ""
+    - name: "Tanish Mahyavanshi"
+      email: ""
+
+submission:
+  title: "ThreatNexus — Threat Intelligence Correlation & Alert Prioritisation Assistant (Challenge D2)"
+
+  problem_statement: >
+    Defence analysts receive thousands of alerts a day from SIEM systems, satellite and
+    network sensors, firewalls, endpoint agents and threat-intelligence reports — every source
+    in its own format. No human team can read them all. Missing a genuine threat is
+    catastrophic; chasing false positives burns critical resources. Commanders also need the
+    picture in minutes, as a structured BLUF (Bottom Line Up Front) assessment, not as a
+    thousand-row alert queue.
+
+  solution_summary: >
+    ThreatNexus ingests multi-source threat feeds in their native formats (CEF, syslog/Suricata,
+    JSON/NDJSON, CSV and STIX 2.1), normalises and de-duplicates them, enriches every indicator
+    against threat intelligence, and correlates alerts across actors, assets and time. An
+    explainable classifier separates GENUINE threats from LIKELY FALSE POSITIVES (learning from
+    analyst feedback), attacker behaviour is mapped to MITRE ATT&CK techniques and tactics, and
+    multi-stage attack chains are detected when correlated alerts span the kill chain. IBM Bob
+    generates every BLUF summary — per alert and as a prioritised Commander Brief — with a
+    deterministic template fallback so the platform is fully demo-able offline.
+
+  key_features:
+    - "Multi-format feed ingestion: CEF, syslog / Suricata fast-log, JSON/NDJSON, CSV and STIX 2.1 auto-detected, normalised to one schema, cross-feed de-duplicated and linked to the asset inventory"
+    - "Genuine-vs-false-positive verdicts with confidence and human-readable reasons; analyst triage feedback feeds back into the classifier so verdicts sharpen over time"
+    - "MITRE ATT&CK mapping from free-text feed events (e.g. 'ET MALWARE Cobalt Strike Beacon' → T1071, Command & Control) with kill-chain coverage strip and multi-stage attack-chain detection"
+    - "Commander Brief: threat posture, one-sentence bottom line, active attack chains, ranked distinct threats each with a four-part BLUF, and the suppressed noise with reasons — print-ready"
+    - "IBM Bob inference API generates all BLUF text (situation / assessment / recommendation) with a 3-second template fallback; live engine status is shown in the UI"
+    - "Explainable weighted risk score (severity, IOC reputation across every indicator in the log, asset criticality, behaviour, correlation) with full breakdown per alert"
+
+  tech_stack:
+    languages: ["Python", "JavaScript", "HTML", "CSS"]
+    frameworks: ["FastAPI", "SQLAlchemy", "Pydantic", "React 18", "Vite", "Recharts"]
+    ibm_technologies: ["IBM Bob (inference API for BLUF generation)", "IBM Bob (AI coding agent used to build the solution)"]
+    databases: ["SQLite (auto-migrating schema)"]
+    other: ["pytest (34 tests)", "MITRE ATT&CK", "STIX 2.1", "CEF", "Uvicorn"]
+
+  what_we_are_most_proud_of: >
+    The single assessment pipeline. Every path — feed ingest, alert detail, ad-hoc analyze,
+    bulk rescore and the Commander Brief — runs the same enrich → correlate → score → verdict →
+    MITRE → BLUF chain, so the dashboard, the detail view and the brief can never disagree.
+    Paste a raw Suricata log, a Palo Alto CEF line and a STIX bundle, and within seconds the
+    brief reads "CRITICAL — isolate DC01 now; 45.155.204.18 has progressed through Initial Access
+    → Execution → Privilege Escalation → Credential Access → Command & Control", while the port
+    scans from an unknown IP are listed underneath as suppressed noise, with the reason.
+
+  known_limitations: >
+    No authentication — every endpoint is open and the platform is not production-hardened.
+    Threat-intelligence enrichment is a local IOC table (populated via STIX or the API); there
+    are no live VirusTotal / MISP connectors. Feeds arrive over REST (paste or POST), not via
+    persistent SIEM connectors. IBM Bob credentials are optional: without them the BLUF text is
+    template-generated (clearly labelled "template mode" in the UI). SQLite is used for local
+    development only.
+
+artifacts:
+  source_code: "src/"
+  setup_guide: "docs/setup-guide.md"
+  architecture_doc: "docs/architecture.md"
+  demo_video: "demo/demo-video-link.txt"
+  live_demo: "demo/live-demo-url.txt"
+  screenshots: "demo/screenshots/"
+  presentation: "presentation/"

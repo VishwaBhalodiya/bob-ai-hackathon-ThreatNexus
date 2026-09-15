@@ -1,0 +1,40 @@
+{
+  "alerts": [
+    {
+      "@timestamp": "2026-09-15T09:13:20Z",
+      "rule_name": "Windows 4625 - repeated failed logons (Administrator)",
+      "severity": "high",
+      "source": { "ip": "203.0.113.99" },
+      "destination": { "ip": "10.0.0.10", "hostname": "DC01.corp.local" },
+      "message": "47 failed logons against Administrator from a single external IP in 5 minutes",
+      "log_source": "SIEM"
+    },
+    {
+      "@timestamp": "2026-09-15T09:15:55Z",
+      "rule_name": "Mimikatz-like LSASS access",
+      "severity": "critical",
+      "source": { "ip": "185.220.101.47" },
+      "destination": { "ip": "10.0.0.20", "hostname": "SQLSRV01.corp" },
+      "message": "procdump.exe opened lsass.exe with PROCESS_VM_READ",
+      "log_source": "EDR"
+    },
+    {
+      "@timestamp": "2026-09-15T09:40:10Z",
+      "rule_name": "Impossible travel login",
+      "severity": "medium",
+      "source": { "ip": "198.51.100.22" },
+      "destination": { "ip": "192.168.1.82", "hostname": "FIN-WS-08" },
+      "message": "User j.harris signed in from two countries within 20 minutes",
+      "log_source": "SIEM"
+    },
+    {
+      "@timestamp": "2026-09-15T09:41:00Z",
+      "rule_name": "Phishing email with credential-harvest URL",
+      "severity": "medium",
+      "source": { "ip": "198.51.100.22" },
+      "destination": { "ip": "192.168.1.45", "hostname": "HR-LAPTOP-12" },
+      "message": "Quarantined mail from noreply@phish-bank.tk linking to http://update-patch.info/verify",
+      "log_source": "Email Security"
+    }
+  ]
+}

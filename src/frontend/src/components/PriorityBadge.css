@@ -1,0 +1,30 @@
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 9px;
+  border-radius: 2px;          /* sharp corners — this is a system readout, not a tag */
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.badge-critical {
+  background: var(--critical-bg);
+  color: var(--critical);
+  border: 1px solid rgba(239,68,68,0.30);
+  /* The one deliberate motion: CRITICAL breathes to signal live danger */
+  animation: critical-pulse 3s ease-in-out infinite;
+}
+
+@keyframes critical-pulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(239,68,68,0);   }
+  50%       { box-shadow: 0 0 6px 1px rgba(239,68,68,0.22); }
+}
+
+.badge-high   { background: var(--high-bg);   color: var(--high);   border: 1px solid rgba(249,115,22,0.25); }
+.badge-medium { background: var(--medium-bg); color: var(--medium); border: 1px solid rgba(234,179,8,0.25); }
+.badge-low    { background: var(--low-bg);    color: var(--low);    border: 1px solid rgba(34,197,94,0.25); }

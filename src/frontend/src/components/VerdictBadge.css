@@ -1,0 +1,43 @@
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.verdict-symbol { font-size: 9px; }
+
+.verdict-conf {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  opacity: 0.75;
+  letter-spacing: 0;
+}
+
+.verdict-compact { padding: 1px 6px; font-size: 9px; }
+
+.verdict-genuine {
+  color: var(--critical);
+  background: var(--critical-bg);
+  border-color: rgba(239,68,68,0.30);
+}
+
+.verdict-fp {
+  color: var(--text-muted);
+  background: rgba(74,99,128,0.10);
+  border-color: rgba(74,99,128,0.35);
+}
+
+.verdict-review {
+  color: var(--medium);
+  background: var(--medium-bg);
+  border-color: rgba(234,179,8,0.30);
+}

@@ -1,0 +1,40 @@
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  margin-right: 8px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.ai-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.ai-badge-brand {
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.6px;
+}
+
+.ai-badge-mode {
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.ai-badge-live {
+  border-color: rgba(14,165,233,0.45);
+  background: rgba(14,165,233,0.08);
+}
+.ai-badge-live .ai-badge-dot  { background: var(--accent-live); box-shadow: 0 0 6px var(--accent-live); }
+.ai-badge-live .ai-badge-mode { color: var(--accent-live); }
