@@ -69,8 +69,17 @@ CEF · syslog/Suricata · JSON · CSV · STIX 2.1
 
 ## Tech stack
 
-Python 3.11+ · FastAPI · SQLAlchemy · Pydantic · SQLite · React 18 · Vite · Recharts · pytest
-IBM Bob (inference API, chat/completions) · MITRE ATT&CK · STIX 2.1 · CEF
+| Category | Technologies |
+|---|---|
+| *Languages* | Python, JavaScript / TypeScript, HTML, CSS |
+| *Frameworks* | FastAPI, React.js, Vite |
+| *AI Technologies* | IBM Bob AI, LLM-based threat explanation |
+| *Databases* | SQLite |
+| *Data Processing* | Python, Pydantic, SQLAlchemy |
+| *Visualization* | Recharts |
+| *API* | REST APIs |
+| *Development Tools* | Git, GitHub, VS Code, Postman |
+| *Other* |  MITRE ATT&CK · STIX 2.1 · CEF |
 
 ## How to run
 
