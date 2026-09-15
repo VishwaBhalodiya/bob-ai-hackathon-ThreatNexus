@@ -6,74 +6,143 @@
 
 Before you begin, ensure you have the following installed:
 
-- [ ] [e.g., Python 3.11+]
-- [ ] [e.g., Node.js 18+]
-- [ ] [e.g., Docker Desktop]
-- [ ] [e.g., An IBM Cloud account with watsonx.ai access]
+- [ ] Python 3.11 or newer
+- [ ] Node.js 18 or newer and npm
+- [ ] Git
+
+Optional (for AI-assisted explanations):
+
+- [ ] An IBM Cloud account with watsonx.ai access
+- [ ] A watsonx.ai project ID and API key
+
+## Repository Structure
+
+```
+src/
+  backend/          ← FastAPI Python backend
+    app/
+      routes/       ← API route handlers
+      services/     ← IOC extractor, risk scorer, correlator, AI explainer
+      models.py     ← SQLAlchemy ORM models
+      schemas.py    ← Pydantic request/response schemas
+      seed.py       ← Demo data seeder
+      database.py   ← DB connection and session factory
+    main.py         ← FastAPI application entry point
+    requirements.txt
+  frontend/         ← React + Vite TypeScript SPA
+    src/
+      components/   ← AlertCard, AlertDetail, RiskBadge, IOCPanel, etc.
+      App.tsx        ← Main layout + state
+      api.ts         ← Typed fetch wrappers
+      types.ts       ← TypeScript interfaces
+    package.json
+    vite.config.ts
+```
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and fill in the values:
+Copy `.env.example` to `.env` and fill in values:
 
 ```bash
-cp .env.example .env
+cp src/.env.example src/.env
 ```
 
 | Variable | Description | Required |
 |---|---|---|
-| `WATSONX_API_KEY` | Your IBM watsonx.ai API key | Yes |
-| `WATSONX_PROJECT_ID` | Your watsonx.ai project ID | Yes |
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `SLACK_WEBHOOK_URL` | Slack webhook for alerts | No |
+| `WATSONX_API_KEY` | IBM watsonx.ai API key | No — uses template fallback if absent |
+| `WATSONX_PROJECT_ID` | watsonx.ai project ID | No — uses template fallback if absent |
+| `WATSONX_URL` | watsonx.ai region endpoint | No — defaults to `us-south` |
+| `WATSONX_MODEL_ID` | Granite model ID | No — defaults to `ibm/granite-3-8b-instruct` |
+| `DATABASE_URL` | SQLAlchemy DB URL | No — defaults to `sqlite:///./threatenexus.db` |
+| `APP_PORT` | Backend port | No — defaults to `8000` |
 
 ## Installation
 
+### Backend
+
 ```bash
-# 1. Clone the repository
-git clone https://github.com/[your-org]/[your-repo].git
-cd [your-repo]
+cd src/backend
 
-# 2. Install backend dependencies
-[your command — e.g.: pip install -r requirements.txt]
+# Create and activate a virtual environment
+python -m venv venv
 
-# 3. Install frontend dependencies (if applicable)
-[your command — e.g.: cd frontend && npm install]
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
 
-# 4. Set up the database (if applicable)
-[your command — e.g.: python manage.py migrate]
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Frontend
+
+```bash
+cd src/frontend
+npm install
 ```
 
 ## Running the Application
 
-```bash
-# Start the backend
-[your command — e.g.: uvicorn app.main:app --reload]
+### 1. Start the backend (terminal 1)
 
-# Start the frontend (in a separate terminal, if applicable)
-[your command — e.g.: cd frontend && npm run dev]
+```bash
+cd src/backend
+# Activate venv first if not already active
+uvicorn main:app --reload --port 8000
 ```
 
-The application will be available at: `http://localhost:[PORT]`
+The backend will:
+- Create `threatenexus.db` (SQLite) automatically on first run
+- Seed demo assets, threat intelligence, and pre-enriched alerts
+- Serve the REST API at `http://localhost:8000`
+- Expose interactive API docs at `http://localhost:8000/docs`
+
+### 2. Start the frontend (terminal 2)
+
+```bash
+cd src/frontend
+npm run dev
+```
+
+The dashboard will be available at: **`http://localhost:5173`**
+
+## Quick Demo
+
+The database seeds automatically on first launch. Open `http://localhost:5173` and you will see:
+
+- 6 pre-seeded alerts ranging from 🔴 CRITICAL (APT C2 beacon) to 🟢 LOW (DNS anomaly)
+- 8 threat intelligence records from AlienVault OTX, VirusTotal, PhishTank, Shodan
+- 6 assets including domain controllers, database servers, and workstations
+- 3 correlated alerts grouped into an APT campaign storyline
+
+To ingest a new alert manually:
+
+```bash
+curl -X POST http://localhost:8000/api/alerts/ingest \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Malware C2 beacon detected",
+    "description": "Host attempted connection to 185.220.101.47 on port 443.",
+    "source_system": "EDR",
+    "source_severity": "high",
+    "asset_hostname": "dc01.corp.internal"
+  }'
+```
 
 ## Running Tests
 
 ```bash
-[your test command — e.g.: pytest tests/ -v]
-```
-
-## Quick Demo (Optional)
-
-If you have a demo script or sample data to showcase the project quickly:
-
-```bash
-[e.g.: python demo/seed_demo_data.py]
-[e.g.: open http://localhost:8000/demo]
+cd src/backend
+pytest tests/ -v
 ```
 
 ## Troubleshooting
 
 | Issue | Solution |
 |---|---|
-| [e.g., `ModuleNotFoundError`] | [e.g., Run `pip install -r requirements.txt` again] |
-| [e.g., Database connection refused] | [e.g., Ensure PostgreSQL is running: `docker compose up db`] |
-| [e.g., watsonx.ai 401 error] | [e.g., Check `WATSONX_API_KEY` in your `.env` file] |
+| `ModuleNotFoundError` | Ensure your virtual environment is activated and `pip install -r requirements.txt` completed successfully |
+| Frontend shows "Failed to load data" | Confirm the backend is running on port 8000 — check terminal 1 |
+| watsonx.ai 401 error | Check `WATSONX_API_KEY` and `WATSONX_PROJECT_ID` in `.env`; the platform works without them |
+| Port 8000 already in use | Use `uvicorn main:app --reload --port 8001` and update `vite.config.ts` proxy target |
+| SQLite database locked | Stop all backend instances and restart with a single `uvicorn` process |
