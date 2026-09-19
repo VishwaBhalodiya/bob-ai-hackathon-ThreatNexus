@@ -41,12 +41,11 @@ Every source has its own field names, severity scale, timestamp convention and e
 
 ## What a solution must do (the challenge, restated as acceptance criteria)
 
-1. **Ingest multi-source feeds** in their native formats without a bespoke connector per source.
-2. **Correlate** alerts across actors, assets and time and **separate genuine threats from false
-   positives** — explainably, and improving as analysts give feedback.
-3. **Map attacker techniques to MITRE ATT&CK** so activity is described in a shared vocabulary and
-   multi-stage progressions become visible.
-4. **Generate prioritised BLUF investigation summaries** a commander can read in minutes.
+| # | Requirement | ThreatNexus Status |
+|---|---|---|
+| 1 | **Ingest multi-source feeds** in native formats without a bespoke connector per source | ✅ CEF, syslog, JSON/NDJSON, CSV, STIX 2.1 — auto-detected, normalised, de-duplicated |
+| 2 | **Correlate** alerts and **separate genuine threats from false positives** — explainably, improving with analyst feedback | ✅ 24-h cluster + ±10-min siblings; rule-based FP classifier with 5-signal scoring + analyst feedback loop |
+| 3 | **Map attacker techniques to MITRE ATT&CK** — shared vocabulary, multi-stage progressions visible | ✅ Full technique/tactic table; alias resolver; attack-chain detection (≥3 tactics); heat-strip UI |
+| 4 | **Generate prioritised BLUF investigation summaries** a commander can read in minutes | ✅ Per-alert BLUF (IBM Bob or deterministic template); Commander Brief with posture + chains + ranked list |
 
-ThreatNexus is built against exactly these four criteria — see
-[solution-overview.md](solution-overview.md).
+See [solution-overview.md](solution-overview.md) for full implementation detail.

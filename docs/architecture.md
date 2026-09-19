@@ -1,5 +1,24 @@
 # Architecture
 
+## ✅ What's Built
+
+| Component | Status | Location |
+|---|---|---|
+| Bot 1 — Cyber/SIEM Bot | ✅ Done | `src/backend/bots/cyber_bot.py` |
+| Bot 2 — Intelligence Bot | ✅ Done | `src/backend/bots/intelligence_bot.py` |
+| Bot 3 — Satellite/Telemetry Bot | ✅ Done | `src/backend/bots/satellite_bot.py` |
+| Bot 4 — Fusion & Decision Bot | ✅ Done | `src/backend/bots/fusion_bot.py` |
+| Evidence Matrix (cross-source) | ✅ Done | `bots/fusion_bot.py` + `components/EvidenceMatrix.jsx` |
+| False-positive classifier | ✅ Done | `services/fp_classifier.py` — rule-based, analyst-feedback loop |
+| Multi-source risk score (7 factors) | ✅ Done | `bots/fusion_bot.py` |
+| Fusion weights API (GET/PUT) | ✅ Done | `routes/fusion.py` |
+| Learning dataset (JSON schema) | ✅ Done | `data/historical/learning_dataset.json` |
+| Trained ML model | ❌ Not done — dataset structure prepared for a future model |
+| FusionPanel UI (Live Demo button) | ✅ Done | `src/frontend/src/components/FusionPanel.jsx` |
+| Sample data files (cyber / intel / satellite) | ✅ Done | `src/backend/data/` |
+
+---
+
 ## 4-Bot Multi-Source Intelligence Fusion
 
 ThreatNexus is built around **four genuinely different bots** operating over **three independent

@@ -5,6 +5,33 @@ Everything that enters — a CEF line, a Suricata log, a SIEM JSON export, a STI
 as a scored, correlated, MITRE-mapped alert with a verdict and a BLUF summary, and rolls up into a
 Commander Brief.
 
+---
+
+## ✅ Implementation Status
+
+| Requirement | Status | File(s) |
+|---|---|---|
+| Multi-source feed ingestion (CEF, syslog, JSON, CSV, STIX) | ✅ Done | `services/feed_ingestor.py` |
+| Alert correlation (24-hour cluster + ±10-min siblings) | ✅ Done | `services/correlation_engine.py` |
+| False-positive classification with analyst feedback loop | ✅ Done | `services/fp_classifier.py` |
+| MITRE ATT&CK mapping for all event types | ✅ Done | `services/mitre_mapper.py` |
+| Risk scoring engine | ✅ Done | `services/risk_engine.py` |
+| Attack-chain detection (≥3 MITRE tactics) | ✅ Done | `services/correlation_engine.py` |
+| IBM Bob BLUF summary generation | ✅ Done | `services/ai_engine.py` |
+| Deterministic template fallback (no Bob dependency) | ✅ Done | `services/ai_engine.py` |
+| Commander Brief (posture + chains + ranked priorities) | ✅ Done | `routes/brief.py` |
+| 4-bot multi-source fusion (Cyber, Intel, Satellite, Fusion) | ✅ Done | `bots/` |
+| Fusion Evidence Matrix + cross-source risk score | ✅ Done | `bots/fusion_bot.py` |
+| REST API (FastAPI) | ✅ Done | `routes/` |
+| React dashboard + alert detail + commander brief UI | ✅ Done | `src/frontend/` |
+| Analyst feedback endpoint (re-scores immediately) | ✅ Done | `routes/alerts.py` |
+| IOC extraction and threat intelligence lookup | ✅ Done | `services/ioc_extractor.py`, `services/threat_intelligence.py` |
+| De-duplication across feeds (same actor+event±90s) | ✅ Done | `services/feed_ingestor.py` |
+| Learning dataset (multi-source schema for future model) | ✅ Done | `data/historical/learning_dataset.json` |
+| Trained ML model | ❌ Not done — rule-based scoring + analyst feedback used instead |
+
+---
+
 ## 1. Ingest multi-source feeds (`src/backend/services/feed_ingestor.py`)
 
 | Format | Detected by | Parser handles |
@@ -90,3 +117,4 @@ deterministic template renders the same four fields so the UI never blocks.
 | Score on the strongest IOC anywhere in the log | A weak source IP delivering a link to a known phishing domain is a phishing alert, not noise. |
 | Template fallback with identical shape | Bob makes the prose better; it is never a single point of failure for the demo. |
 | Alias-based event normalisation | Feeds describe the same technique in dozens of ways; a resolver beats a rule per feed. |
+| Rule-based FP classifier (no trained ML model) | Explainability and zero data dependency at startup; analyst feedback provides the learning signal instead of offline training. |

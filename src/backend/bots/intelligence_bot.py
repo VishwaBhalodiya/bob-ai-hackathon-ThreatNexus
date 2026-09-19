@@ -136,7 +136,13 @@ def process_report(raw_report: dict) -> dict:
     # Extract all IOCs from the full text
     iocs = extract_iocs(full_text)
     # Also honour pre-supplied indicator lists (e.g. from threat feeds)
-    prebuilt: list[str] = raw_report.get("indicators") or []
+    prebuilt_raw = raw_report.get("indicators") or []
+    # Accept both plain strings and dicts like {"type": "ip", "value": "..."}
+    prebuilt: list[str] = [
+        i["value"] if isinstance(i, dict) else i
+        for i in prebuilt_raw
+        if isinstance(i, dict) and i.get("value") or isinstance(i, str) and i
+    ]
     seen_vals = {i["value"].lower() for i in iocs}
     for val in prebuilt:
         if val.lower() not in seen_vals:
