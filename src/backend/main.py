@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import ensure_schema
 import models  # noqa: F401 – ensure all models are registered before create_all
 
-from routes import alerts, iocs, dashboard, ingest, brief, assets
+from routes import alerts, iocs, dashboard, ingest, brief, assets, fusion
 
 # ── Create all tables + add any new columns ───────────────────────────────────
 ensure_schema()
@@ -32,6 +32,7 @@ app.include_router(assets.router)
 app.include_router(dashboard.router)
 app.include_router(ingest.router)
 app.include_router(brief.router)
+app.include_router(fusion.router)
 
 
 @app.get("/", tags=["health"])

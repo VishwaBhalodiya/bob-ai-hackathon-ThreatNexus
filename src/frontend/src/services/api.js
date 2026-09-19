@@ -1,4 +1,4 @@
-const BASE = 'http://localhost:8000'
+const BASE = ''
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, options)
@@ -30,6 +30,11 @@ export const api = {
   getAiStatus:     ()          => request('/api/ai/status'),
   getAssets:       ()          => request('/api/assets'),
   lookupIoc:       (value)     => request(`/api/iocs/lookup/${encodeURIComponent(value)}`),
+  // ── Fusion Bot API ──────────────────────────────────────────────────────
+  getFusionSamples:()          => request('/api/fusion/samples'),
+  getFusionLive:   ()          => request('/api/fusion/live'),
+  getFusionWeights:()          => request('/api/fusion/weights'),
+  runFusion:       (body)      => request('/api/fusion/run', json('POST', body)),
 
   // ── Write ───────────────────────────────────────────────────────────────
   ingest:       (payload, format='auto', source=null) =>

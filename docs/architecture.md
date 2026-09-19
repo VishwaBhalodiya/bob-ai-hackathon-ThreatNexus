@@ -1,120 +1,311 @@
 # Architecture
 
-## System diagram
+## 4-Bot Multi-Source Intelligence Fusion
+
+ThreatNexus is built around **four genuinely different bots** operating over **three independent
+source streams**.  The key design principle, drawn from how MITRE ATT&CK itself describes
+multi-source CTI: *don't have all four bots do the same thing*.  Each bot adds independent
+evidence.  Bot 4 (the Fusion Bot) determines whether those independent streams **agree** — and
+scores the certainty of that agreement.
+
+```
+                    ┌───────────────────────┐
+                    │      LIVE SOURCES      │
+                    └───────────────────────┘
+                       │        │        │
+             ┌─────────┘        │        └─────────┐
+             ▼                  ▼                  ▼
+      ┌────────────┐    ┌────────────┐    ┌────────────┐
+      │   BOT 1    │    │   BOT 2    │    │   BOT 3    │
+      │ CYBER/SIEM │    │   INTEL    │    │ SATELLITE  │
+      │    BOT     │    │    BOT     │    │    BOT     │
+      └─────┬──────┘    └─────┬──────┘    └─────┬──────┘
+            │                 │                  │
+            └─────────────────┼──────────────────┘
+                              ▼
+                    ┌──────────────────┐
+                    │      BOT 4       │
+                    │  FUSION &        │
+                    │  DECISION BOT    │
+                    └────────┬─────────┘
+                             │
+             ┌───────────────┼────────────────┐
+             ▼               ▼                ▼
+        Evidence Matrix   FP/Risk         MITRE ATT&CK
+                             │
+                             ▼
+                    PRIORITY + BLUF
+                             │
+                             ▼
+                        DASHBOARD
+                             │
+                             ▼
+                     ANALYST FEEDBACK
+                             │
+                             ▼
+                   ┌──────────────────┐
+                   │ LEARNING DATASET │
+                   └────────┬─────────┘
+                            │
+                            ▼
+                      MODEL UPDATE
+```
+
+## System diagram (full component view)
 
 ```mermaid
 graph TD
-    subgraph Feeds["Threat feeds (native formats)"]
-        FW[Firewall / WAF<br/>CEF]
-        IDS[IDS / IPS<br/>syslog · Suricata fast-log]
-        SIEM[SIEM / EDR<br/>JSON · NDJSON · CSV]
-        TI[Threat-intel sharing<br/>STIX 2.1]
+    subgraph Sources["Live sources (simulated for demo)"]
+        SIEM[SIEM / EDR / JSON · CSV]
+        IDS[IDS / IPS · Firewall · CEF · syslog]
+        TI[Threat intel · OSINT · STIX 2.1]
+        SAT[Satellite telemetry · ground stations]
+    end
+
+    subgraph Bot1["Bot 1 — Cyber/SIEM Bot (bots/cyber_bot.py)"]
+        C1[Normalise event]
+        C2[Extract IOCs]
+        C3[Cyber confidence]
+        C4[MITRE candidate]
+    end
+
+    subgraph Bot2["Bot 2 — Intelligence Bot (bots/intelligence_bot.py)"]
+        I1[Parse report / feed]
+        I2[Extract indicators]
+        I3[Behaviour extraction]
+        I4[MITRE mapping]
+    end
+
+    subgraph Bot3["Bot 3 — Satellite Bot (bots/satellite_bot.py)"]
+        S1[Ingest telemetry]
+        S2[Compute anomaly score]
+        S3[Classify anomaly type]
+        S4[Evidence description]
+    end
+
+    subgraph Bot4["Bot 4 — Fusion & Decision Bot (bots/fusion_bot.py)"]
+        F1[Time coincidence]
+        F2[IOC overlap]
+        F3[Evidence Matrix]
+        F4[Multi-source risk score]
+        F5[FP probability]
+        F6[MITRE consensus]
+        F7[BLUF data]
     end
 
     subgraph API["FastAPI backend (src/backend)"]
-        ING[routes/ingest.py<br/>POST /api/ingest]
-        FI[services/feed_ingestor.py<br/>detect · parse · normalise]
-        PIPE[services/pipeline.py<br/>assess()]
-        TIS[threat_intelligence.py<br/>IOC enrichment]
-        IOCX[ioc_extractor.py<br/>IPs · domains · URLs · hashes]
-        CORR[correlation_engine.py<br/>clusters · siblings · chains]
-        RISK[risk_engine.py<br/>weighted 0-100 score]
-        FP[fp_classifier.py<br/>genuine / review / likely-FP]
-        MITRE[mitre_mapper.py<br/>technique · tactic · kill-chain]
-        AI[ai_engine.py<br/>BLUF via IBM Bob]
-        BRIEF[routes/brief.py<br/>GET /api/brief]
-        DB[(SQLite<br/>assets · iocs · alerts · events)]
+        FUS[routes/fusion.py · POST /api/fusion/run]
+        ING[routes/ingest.py · POST /api/ingest]
+        PIPE[services/pipeline.py · assess()]
+        DB[(SQLite · alerts · iocs · assets)]
+        AI[services/ai_engine.py · IBM Bob]
+        BRIEF[routes/brief.py · GET /api/brief]
     end
 
-    BOB[[IBM Bob inference API<br/>chat/completions]]
+    BOB[[IBM Bob inference API]]
 
     subgraph UI["React frontend (src/frontend)"]
-        DASH[Dashboard<br/>ingest panel · stats · ATT&CK strip · alert table]
-        DET[Alert Detail<br/>BLUF · verdict · risk breakdown · timeline · triage]
-        CB[Commander Brief<br/>posture · chains · ranked BLUFs · suppressed]
+        DASH[Dashboard · FusionPanel · FeedIngestPanel]
+        EMAT[EvidenceMatrix component]
+        DET[Alert Detail · BLUF · verdict · timeline]
+        CB[Commander Brief · posture · chains · ranked BLUFs]
     end
 
-    FW --> ING
-    IDS --> ING
-    SIEM --> ING
-    TI --> ING
-    ING --> FI --> PIPE
-    PIPE --> IOCX --> TIS
-    PIPE --> CORR
-    PIPE --> RISK
-    PIPE --> FP
-    PIPE --> MITRE
-    PIPE --> AI
-    AI -->|prompt: score breakdown,<br/>verdict signals, MITRE| BOB
+    SIEM --> Bot1
+    IDS  --> Bot1
+    TI   --> Bot2
+    SAT  --> Bot3
+
+    Bot1 --> FUS
+    Bot2 --> FUS
+    Bot3 --> FUS
+    FUS --> F1 --> F3
+    FUS --> F2 --> F3
+    F3  --> F4
+    F3  --> F5
+    F3  --> F6
+    F3  --> F7
+    F7  --> AI
+    AI  -->|prompt| BOB
     BOB -->|JSON BLUF| AI
-    AI -.->|timeout / error| AI
-    PIPE --> DB
-    TIS --> DB
-    CORR --> DB
+
+    SIEM --> ING --> PIPE --> DB
     DB --> BRIEF
-    BRIEF --> PIPE
-    DASH --> ING
-    DASH --> DB
+    DB --> DASH
+    DASH --> FUS
+    DASH --> EMAT
     DET --> PIPE
     CB --> BRIEF
 ```
 
-## Components
+## The four bots
 
-| Component | Technology | Responsibility |
+| Bot | Primary sources | Main responsibility |
 |---|---|---|
-| `routes/ingest.py` | FastAPI | Accepts raw feed text or JSON, dispatches to the parser, de-duplicates, links assets, persists, re-scores neighbours; serves bundled sample feeds |
-| `services/feed_ingestor.py` | Python, `re`, `csv`, `json` | Format detection and five parsers → one canonical record; STIX → IOC dicts |
-| `services/pipeline.py` | Python | **The** assessment path: enrich → correlate → score → verdict → MITRE → BLUF; `assess_alert()` for stored rows; `rescore_all()` |
-| `services/ioc_extractor.py` | regex | Pure extraction of IPs, domains, URLs, hashes, e-mails from log text |
-| `services/threat_intelligence.py` | SQLAlchemy | IOC reputation / confidence / threat-type lookup (swap body for a live TI API) |
-| `services/correlation_engine.py` | SQLAlchemy | 24 h clusters, ±10 min siblings, attack-chain detection by tactic spread |
-| `services/risk_engine.py` | Python | 0.25·severity + 0.25·IOC + 0.20·asset + 0.15·behaviour + 0.15·correlation → priority |
-| `services/fp_classifier.py` | Python | Explainable genuine / needs-review / likely-FP verdict; analyst-history learning |
-| `services/mitre_mapper.py` | Python | Event → ATT&CK technique/tactic; alias resolver; kill-chain order |
-| `services/ai_engine.py` | `requests` → **IBM Bob** | BLUF prompt, Bob chat/completions call, JSON validation, template fallback, status counters |
-| `routes/brief.py` | FastAPI | Commander Brief, attack chains, MITRE coverage |
-| `routes/alerts.py`, `dashboard.py`, `assets.py`, `iocs.py` | FastAPI | Alert list/detail/feedback/status/rescore, stats, analyze, AI status, asset & IOC CRUD |
-| `database.py` | SQLAlchemy + SQLite | Engine anchored to `src/backend/`, `ensure_schema()` adds new columns on start-up |
-| `src/frontend` | React 18, Vite, Recharts | Dashboard, Alert Detail, Commander Brief; `AiEngineBadge` polls `/api/ai/status` |
+| **Bot 1 — Cyber/SIEM Bot** | SIEM, EDR, network sensors, firewall, IDS/IPS, authentication logs | Detect and normalise cyber events; extract IOCs; assign cyber confidence; propose MITRE candidate |
+| **Bot 2 — Intelligence Bot** | CTI reports, OSINT, threat feeds, IOC feeds, STIX 2.1 | Extract indicators, entities, behaviours from structured + unstructured text; map to MITRE ATT&CK |
+| **Bot 3 — Satellite/Telemetry Bot** | Satellite telemetry, ground-station feeds, communication anomaly streams | Detect anomalies; score anomaly severity; produce independent evidence description for the Fusion Bot |
+| **Bot 4 — Fusion & Decision Bot** | Outputs of Bots 1–3 + historical data | Correlate; compute Evidence Matrix; estimate FP likelihood; score multi-source risk; reach MITRE consensus; generate BLUF |
 
-## Data flow, end to end
+## Why the satellite bot does NOT say "satellite anomaly = cyber attack"
 
-1. **Ingest.** A feed payload hits `POST /api/ingest {payload, format, source}`. `feed_ingestor.parse()`
-   sniffs the format, parses each record, normalises event names via `mitre_mapper.normalise_event_type()`
-   and severities onto LOW–CRITICAL.
-2. **De-duplicate & link.** Each record is checked against existing alerts (same actor, event,
-   target, ±90 s) and linked to an `Asset` by destination IP or hostname.
-3. **Assess.** `pipeline.assess()`:
-   - looks up the source IP and every IOC extracted from the log (URLs and e-mails are also
-     looked up by host/domain); the strongest reputation drives the score;
-   - counts 24 h correlated alerts and fetches ±10 min siblings; classifies an attack chain if the
-     siblings span ≥3 tactics;
-   - computes the weighted risk score and priority;
-   - runs the false-positive classifier with the analyst history for that actor/technique;
-   - maps the event to ATT&CK;
-   - (on demand) builds the BLUF prompt and calls **IBM Bob**, validating the JSON and falling
-     back to the template on timeout or error.
-4. **Persist.** `Alert` row plus `ThreatEvent` and `Recommendation` children; score, verdict,
-   MITRE fields and matched IOCs are stored so the list view is cheap. Neighbours of the new
-   alert are re-assessed so their correlation reflects the new arrival.
-5. **Brief.** `GET /api/brief` buckets the window's alerts by verdict, detects chains, ranks
-   distinct threats, generates each one's BLUF and composes posture + headline.
-6. **Feedback.** `PATCH /api/alerts/{id}/feedback` re-assesses the alert and updates the history
-   used for future verdicts; `PATCH /api/alerts/{id}/status` moves it through the workflow.
+The satellite bot is designed to provide **independent contextual evidence**, not a direct verdict.
+A satellite communication anomaly in isolation is just an anomaly.  But when:
 
-## IBM Bob integration
+- **Cyber Bot** detects PowerShell execution at 11:15
+- **Intelligence Bot** reports the same IP is a known C2 node
+- **Satellite Bot** reports a communication anomaly at the same time on a co-located asset
 
-See [bob-integration.md](bob-integration.md) for the prompt, the wire call, the fallback contract
-and how to verify Bob is live from the UI.
+…the **Fusion Bot** can assign a high cross-source correlation confidence.
+
+## Evidence Matrix
+
+When the commander opens any fusion result, they see:
+
+```
+INCIDENT #1042
+────────────────────────────────────
+
+                    Evidence
+Cyber Sensor           ✓  (2 events · Brute Force, Lateral Movement)
+Intelligence Report    ✓  (1 report · IOC overlap: 100%)
+Satellite              ✓  (2 events · max anomaly: 91%)
+
+Cross-source correlation: 91%
+Sources corroborating: 3/3
+FP probability: 7% — Genuine Threat
+
+MITRE ATT&CK
+T1110 · T1003 · T1071 · T1021
+
+Risk: 89  Priority: CRITICAL
+
+WHY WAS THIS PRIORITIZED?
+✓ All 3 independent sources corroborate the activity
+✓ Threat intelligence confirms 100% of cyber indicators
+✓ High-severity cyber event (92/100) from endpoint sensor
+✓ Satellite anomaly observed within 15-minute window
+✓ Analysts confirmed 2 previous events from this source as genuine
+```
+
+## False-positive model
+
+FP probability is computed from **cross-source evidence**, not a single alert.
+
+| Factor | FP score adjustment |
+|---|---|
+| Multi-source agreement (3 sources) | −20 |
+| High-severity cyber event | −15 |
+| Strong intel corroboration | −25 |
+| Satellite anomaly corroborates | −12 |
+| Only 1 source reports the activity | +15 |
+| No intelligence corroboration | +18 |
+| Analyst history: prior FP | +18 |
+| Analyst history: prior TP | −18 |
+
+FP score ≤ 25 → `GENUINE_THREAT` · 26–55 → `UNCERTAIN` · > 55 → `LIKELY_FALSE_POSITIVE`
+
+The `UNCERTAIN` state is explicit — the system never forces every alert into TRUE/FALSE.
+
+## Multi-source risk score
+
+```
+Cyber evidence        20%
+Intel corroboration   20%
+Satellite evidence    15%
+Historical behaviour  15%
+Cross-source corr     15%
+Asset criticality     10%
+Recency                5%
+```
+
+These weights are **configuration parameters** exposed via `GET/PUT /api/fusion/weights` so
+analysts can tune them based on operational feedback.  They are not claims of universal correctness.
+
+## Continuous learning dataset
+
+`src/backend/data/historical/learning_dataset.json` uses the multi-source schema:
+
+| Field | Description |
+|---|---|
+| `event_id` | Unique identifier |
+| `source` | Bot that produced the event |
+| `event_type` | Canonical MITRE-aligned type |
+| `cyber_score` | Cyber Bot confidence (0.0–1.0) |
+| `intel_score` | Intel Bot confidence (0.0–1.0) |
+| `satellite_score` | Satellite Bot anomaly score (0.0–1.0) |
+| `correlation_score` | Cross-source correlation |
+| `sources_present` | Independent sources corroborating (1–3) |
+| `analyst_label` | Ground truth: `TRUE_POSITIVE` / `FALSE_POSITIVE` |
+
+This lets a future model learn **which combinations of evidence matter** — not just individual
+alert types.
+
+## Data layout
+
+```
+src/backend/data/
+├── cyber/
+│   ├── siem_events.json          SIEM authentication + lateral movement events
+│   ├── network_events.json       Network sensor / IDS events
+│   └── endpoint_events.json      EDR PowerShell, LSASS, firewall events
+├── intelligence/
+│   ├── threat_reports.json       CTI prose reports (unstructured + structured)
+│   ├── iocs.json                 IOC feed (IP, domain, hash with reputation)
+│   └── threat_feeds.json         ISAC advisories
+├── satellite/
+│   ├── telemetry.json            Satellite/ground-station telemetry streams
+│   └── anomalies.json            Pre-classified anomaly events
+└── historical/
+    ├── incidents.json            Past confirmed incidents
+    └── learning_dataset.json     Multi-source training data (schema v2)
+
+src/backend/bots/
+├── __init__.py
+├── cyber_bot.py                  Bot 1 — normalise + confidence + MITRE candidate
+├── intelligence_bot.py           Bot 2 — extract indicators + behaviours + MITRE
+├── satellite_bot.py              Bot 3 — anomaly scoring + evidence description
+└── fusion_bot.py                 Bot 4 — correlate + Evidence Matrix + FP + risk + BLUF data
+
+src/backend/routes/
+├── fusion.py                     POST /api/fusion/run  GET /api/fusion/live  GET /api/fusion/weights
+└── …existing routes…
+
+src/backend/sample_feeds/
+├── satellite_telemetry.json      Satellite sample feed for the ingestion panel
+└── …existing feeds…
+
+src/frontend/src/components/
+├── FusionPanel.jsx               Live 4-bot demo — "Run Live Demo" button
+├── EvidenceMatrix.jsx            Evidence Matrix + "Why was this prioritized?"
+└── …existing components…
+```
+
+## Live demo flow
+
+1. Open the dashboard → click **▶ Run Live Demo** in the Fusion panel
+2. Backend loads sample data for all three source bots
+3. Bot 1 processes SIEM + EDR events → cyber events with IOCs and MITRE candidates
+4. Bot 2 processes CTI reports → indicators, behaviours, MITRE techniques
+5. Bot 3 processes satellite telemetry → anomaly scores and evidence descriptions
+6. Bot 4 fuses all three → Evidence Matrix + risk score + FP probability + BLUF
+7. Dashboard updates instantly with the full cross-source result
+8. Analyst submits feedback → new labelled example added to the learning dataset
+
+## Original single-pipeline architecture (still present)
+
+The original `pipeline.assess()` pathway is unchanged — all existing ingest, alert detail and
+Commander Brief routes still use it.  The 4-bot fusion layer is **additive**: it adds a new
+`/api/fusion/` group alongside the existing API without modifying any existing endpoint.
+
+See [bob-integration.md](bob-integration.md) for the BLUF prompt, the IBM Bob wire call and
+the fallback contract.
 
 ## Security & scalability notes
 
 * No authentication in this prototype; the API is intended to sit behind an SOC's existing gateway.
 * Bob credentials are read from `src/backend/.env` only (never committed; `.env` is git-ignored).
-* SQLite is used for portability; `DATABASE_URL` and the SQLAlchemy layer allow a PostgreSQL swap
-  without code changes to the services.
-* Parsers are pure functions over text — they can be moved to a queue worker (e.g. Kafka consumer
-  per feed) without touching the assessment pipeline.
-* Bob calls are bounded by `BOB_TIMEOUT`; the brief uses templates by default and opts into Bob
-  per request (`?llm=true`) so one page load never fans out into N unbounded model calls.
+* SQLite for portability; `DATABASE_URL` and the SQLAlchemy layer allow a PostgreSQL swap.
+* Fusion weights are in-memory for the demo; in production they would be persisted per-deployment.
+* Bot modules are pure functions — they can be moved to a queue worker (e.g. Kafka consumer per
+  feed) without touching the fusion or assessment pipeline.

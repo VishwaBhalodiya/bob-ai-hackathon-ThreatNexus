@@ -1,0 +1,46 @@
+[
+  {
+    "source": "SATELLITE",
+    "timestamp": "2026-09-19T11:15:00Z",
+    "asset_id": "SAT-07",
+    "telemetry_status": "anomalous",
+    "communication_status": "degraded",
+    "location_zone": "ZONE-A",
+    "anomaly_score": 0.81,
+    "signal_strength_delta": -0.34,
+    "uplink_latency_ms": 890,
+    "expected_latency_ms": 120,
+    "last_normal_contact": "2026-09-19T11:10:00Z",
+    "description": "Satellite SAT-07 reporting degraded uplink with anomalous timing — latency 890ms vs expected 120ms. Signal strength dropped 34% in 5 minutes.",
+    "severity": "HIGH"
+  },
+  {
+    "source": "SATELLITE",
+    "timestamp": "2026-09-19T11:17:30Z",
+    "asset_id": "SAT-07",
+    "telemetry_status": "anomalous",
+    "communication_status": "intermittent",
+    "location_zone": "ZONE-A",
+    "anomaly_score": 0.91,
+    "signal_strength_delta": -0.52,
+    "uplink_latency_ms": 1450,
+    "expected_latency_ms": 120,
+    "last_normal_contact": "2026-09-19T11:10:00Z",
+    "description": "SAT-07 communication anomaly escalating — intermittent uplink dropout coinciding with unusual state change. Timing anomaly consistent with GPS spoofing or jamming.",
+    "severity": "CRITICAL"
+  },
+  {
+    "source": "GROUND_STATION",
+    "timestamp": "2026-09-19T11:12:00Z",
+    "asset_id": "GS-ALPHA",
+    "telemetry_status": "normal",
+    "communication_status": "normal",
+    "location_zone": "ZONE-B",
+    "anomaly_score": 0.12,
+    "signal_strength_delta": -0.02,
+    "uplink_latency_ms": 115,
+    "expected_latency_ms": 120,
+    "description": "GS-ALPHA operating within normal parameters.",
+    "severity": "LOW"
+  }
+]

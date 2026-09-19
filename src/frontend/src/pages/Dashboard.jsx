@@ -10,6 +10,7 @@ import AlertTable      from '../components/AlertTable.jsx'
 import FeedIngestPanel from '../components/FeedIngestPanel.jsx'
 import TacticCoverage  from '../components/TacticCoverage.jsx'
 import AiEngineBadge   from '../components/AiEngineBadge.jsx'
+import FusionPanel     from '../components/FusionPanel.jsx'
 import { VERDICT_META } from '../components/VerdictBadge.jsx'
 import './Dashboard.css'
 
@@ -204,6 +205,11 @@ export default function Dashboard() {
       {/* ── Feed ingestion ──────────────────────────────────────────────── */}
       <section className="dash-section">
         <FeedIngestPanel onIngested={() => load(true)} />
+      </section>
+
+      {/* ── Live Multi-Source Fusion Demo ───────────────────────────────── */}
+      <section className="dash-section">
+        <FusionPanel />
       </section>
 
       {/* ── MITRE ATT&CK coverage ───────────────────────────────────────── */}
